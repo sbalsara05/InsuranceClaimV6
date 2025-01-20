@@ -9,18 +9,19 @@ const uri = `mongodb+srv://ramseysalem:${mongo_password}@cluster0.9qkjh.mongodb.
 const port = 8000
 
 MongoClient.connect(
-    uri, 
+    uri,
     {
-        maxPoolSize : 75,
+        maxPoolSize: 75,
         wtimeoutMS: 2500,
-        userNewUrlParser: true
+        useNewUrlParser: true,
     }
-).catch(err => {console.error(err.stack)
+).catch(err => {
+    console.error(err.stack)
     process.exit(1)
-})
-.then(async, client => {
+}).then(async client => {
+    await import("./dao/claimsDAO.js").then(({ injectDB }) => injectDB(client))
     app.listen(port, () => {
-        console.log(`listening on port ${port}`)
+        console.log(`Listening on port ${port}`)
     })
 })
 
